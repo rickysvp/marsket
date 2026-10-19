@@ -6,6 +6,7 @@ describe('Marsket account experience', () => {
     const appSource = readFileSync(new URL('./App.jsx', import.meta.url), 'utf8')
 
     expect(appSource).toContain('function Login')
+    expect(appSource).toContain('login-overlay')
     expect(appSource).toContain("rickysvp")
     expect(appSource).toContain('marsket-auth')
     expect(appSource).toContain("path === '/portfolio' || path === '/profile'")
