@@ -29,17 +29,17 @@ export const markets = [
   },
   {
     id: 'aapl-stock', category: 'stocks', categoryLabel: '美股虚拟股', eyebrow: '虚拟股票 / AAPL', kind: 'stock', symbol: 'AAPL',
-    title: 'Apple Inc.（AAPL）虚拟股票', subtitle: '跟踪 AAPL 实时价格变化的模拟持仓产品', price: 210.35, change: 1.62, volume: '¥ 1,240 万', end: '持续交易', source: 'QUOTE / NASDAQ', hot: true,
+    title: 'Apple Inc.（AAPL）虚拟股票', subtitle: '跟踪 AAPL 实时价格变化的持仓产品', price: 210.35, change: 1.62, volume: '¥ 1,240 万', end: '持续交易', source: 'QUOTE / NASDAQ', hot: true,
     spark: [192, 195, 198, 196, 201, 203, 200, 205, 208, 210.35],
   },
   {
     id: 'nvda-stock', category: 'stocks', categoryLabel: '美股虚拟股', eyebrow: '虚拟股票 / NVDA', kind: 'stock', symbol: 'NVDA',
-    title: 'NVIDIA Corp.（NVDA）虚拟股票', subtitle: '跟踪 NVDA 实时价格变化的模拟持仓产品', price: 184.72, change: -0.84, volume: '¥ 980 万', end: '持续交易', source: 'QUOTE / NASDAQ', hot: false,
+    title: 'NVIDIA Corp.（NVDA）虚拟股票', subtitle: '跟踪 NVDA 实时价格变化的持仓产品', price: 184.72, change: -0.84, volume: '¥ 980 万', end: '持续交易', source: 'QUOTE / NASDAQ', hot: false,
     spark: [190, 188, 192, 187, 189, 186, 188, 185, 186, 184.72],
   },
   {
     id: 'tsla-stock', category: 'stocks', categoryLabel: '美股虚拟股', eyebrow: '虚拟股票 / TSLA', kind: 'stock', symbol: 'TSLA',
-    title: 'Tesla Inc.（TSLA）虚拟股票', subtitle: '跟踪 TSLA 实时价格变化的模拟持仓产品', price: 342.18, change: 3.45, volume: '¥ 760 万', end: '持续交易', source: 'QUOTE / NASDAQ', hot: false,
+    title: 'Tesla Inc.（TSLA）虚拟股票', subtitle: '跟踪 TSLA 实时价格变化的持仓产品', price: 342.18, change: 3.45, volume: '¥ 760 万', end: '持续交易', source: 'QUOTE / NASDAQ', hot: false,
     spark: [316, 320, 318, 325, 323, 330, 335, 331, 339, 342.18],
   },
   {
