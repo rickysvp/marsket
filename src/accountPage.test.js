@@ -7,6 +7,7 @@ describe('Marsket account experience', () => {
 
     expect(appSource).toContain('function Login')
     expect(appSource).toContain('login-overlay')
+    expect(appSource).toContain('返回市场')
     expect(appSource).toContain("rickysvp")
     expect(appSource).toContain('marsket-auth')
     expect(appSource).toContain("path === '/portfolio' || path === '/profile'")

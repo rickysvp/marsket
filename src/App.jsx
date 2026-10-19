@@ -137,14 +137,14 @@ function App() {
           <div className="topbar-actions"><button className={`account-trigger ${path === '/profile' ? 'account-trigger--active' : ''}`} onClick={() => navigate('/profile')} aria-label="我的账户"><span className="avatar-button">R</span><span className="avatar-label">我的账户</span></button></div>
         </header>
         {page}
-        {loginRequired && <Login onLogin={(username) => login(username, path)} />}
+        {loginRequired && <Login onLogin={(username) => login(username, path)} onCancel={() => navigate('/markets')} />}
         <Footer onNavigate={navigate} />
       </main>
     </div>
   )
 }
 
-function Login({ onLogin }) {
+function Login({ onLogin, onCancel }) {
   const [username, setUsername] = useState('rickysvp')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -154,7 +154,7 @@ function Login({ onLogin }) {
     if (!password.trim()) return setError('请输入密码')
     onLogin(username.trim())
   }
-  return <div className="login-overlay"><div className="login-glow login-glow--one" /><div className="login-glow login-glow--two" /><main className="login-card"><div className="login-brand"><span className="brand-orbit"><Orbit size={25} strokeWidth={1.7} /></span><span><strong>Marsket</strong><small>火星市场</small></span></div><div className="login-heading"><span className="eyebrow">WELCOME BACK</span><h1>登录<br /><em>火星市场</em></h1><p>进入你的市场、持仓和账户。</p></div><form className="login-form" onSubmit={submit}><label>用户名<input value={username} onChange={(event) => setUsername(event.target.value)} autoComplete="username" /></label><label>密码<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" placeholder="请输入密码" /></label>{error && <div className="login-error">{error}</div>}<button className="login-submit" type="submit">登录账户 <ChevronRight size={16} /></button></form><div className="login-note"><ShieldCheck size={14} /><span>Demo 登录 · 仅用于体验账户流程</span></div></main></div>
+  return <div className="login-overlay"><div className="login-glow login-glow--one" /><div className="login-glow login-glow--two" /><main className="login-card"><button className="login-close" onClick={onCancel}>← 返回市场</button><div className="login-brand"><span className="brand-orbit"><Orbit size={25} strokeWidth={1.7} /></span><span><strong>Marsket</strong><small>火星市场</small></span></div><div className="login-heading"><span className="eyebrow">WELCOME BACK</span><h1>登录<br /><em>火星市场</em></h1><p>进入你的市场、持仓和账户。</p></div><form className="login-form" onSubmit={submit}><label>用户名<input value={username} onChange={(event) => setUsername(event.target.value)} autoComplete="username" /></label><label>密码<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" placeholder="请输入密码" /></label>{error && <div className="login-error">{error}</div>}<button className="login-submit" type="submit">登录账户 <ChevronRight size={16} /></button></form><div className="login-note"><ShieldCheck size={14} /><span>Demo 登录 · 仅用于体验账户流程</span></div></main></div>
 }
 
 function PageHeading({ kicker, title, description, children }) {
