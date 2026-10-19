@@ -75,6 +75,64 @@
 .account-danger p { color: var(--muted); font-size: 11px; margin: 0; }
 @media (max-width: 720px) { .account-layout { grid-template-columns: 1fr; }.account-hero, .account-card--wide, .account-danger { grid-column: auto; }.account-identity { align-items: flex-start; flex-wrap: wrap; }.account-edit { margin-left: 0; width: 100%; justify-content: center; }.account-metrics { grid-template-columns: 1fr 1fr; gap: 18px 10px; }.preference-grid { grid-template-columns: 1fr; }.preference-grid > div, .preference-grid > div:not(:first-child) { padding: 14px 0; border-right: 0; border-bottom: 1px solid var(--line); }.preference-grid > div:last-child { border-bottom: 0; }.account-about { display: block; }.account-about .profile-badges { justify-content: flex-start; margin-top: 20px; }.account-danger { align-items: flex-start; flex-direction: column; gap: 20px; } }
 
+/* Account dashboard: compact identity, clear asset hierarchy, dense holdings detail. */
+.account-header-card { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 19px 22px; background: linear-gradient(100deg, rgba(200,255,77,.07), rgba(17,29,25,.96) 50%), var(--surface); border: 1px solid var(--line); }
+.account-user { display: flex; align-items: center; gap: 14px; }
+.account-user h2 { margin: 5px 0 4px; font: 500 23px var(--serif); }
+.account-user p { margin: 0; color: var(--muted); font-size: 10px; }
+.account-header-actions { display: flex; align-items: center; gap: 18px; color: var(--muted); font: 10px var(--mono); }
+.account-header-actions > span { display: inline-flex; align-items: center; gap: 8px; }
+.account-kpi-grid { display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 1px; margin-top: 17px; background: var(--line); border: 1px solid var(--line); }
+.account-kpi { min-height: 125px; padding: 19px; background: var(--surface); }
+.account-kpi span, .account-kpi small { display: block; color: var(--muted); font-size: 10px; }
+.account-kpi strong { display: block; margin: 14px 0 8px; color: var(--text); font: 20px var(--mono); }
+.account-kpi--primary strong { color: var(--lime); font-size: 25px; }
+.account-kpi small { color: var(--muted-2); font-size: 9px; }
+.account-content-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(275px, .65fr); gap: 17px; margin-top: 17px; }
+.account-content-grid .account-card--wide, .account-content-grid .account-danger { grid-column: 1 / -1; }
+.holdings-card, .recent-trades-card, .account-breakdown { min-width: 0; background: var(--surface); border: 1px solid var(--line); padding: 22px; }
+.holdings-count { color: var(--muted); font: 10px var(--mono); }
+.holdings-table { min-width: 650px; }
+.holdings-table__head, .holding-row { display: grid; grid-template-columns: minmax(220px, 1.7fr) .75fr .8fr .8fr .85fr .8fr; gap: 12px; align-items: center; }
+.holdings-table__head { padding: 0 0 11px; color: var(--muted-2); font: 9px var(--mono); border-bottom: 1px solid var(--line); }
+.holding-row { padding: 13px 0; color: var(--text); border-bottom: 1px solid var(--line); font: 10px var(--mono); }
+.holding-row:last-child { border-bottom: 0; }
+.holding-asset { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.holding-asset > span:last-child { min-width: 0; }
+.holding-asset strong, .holding-asset small, .holding-row small { display: block; }
+.holding-asset strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 11px 'DM Sans'; }
+.holding-asset small { margin-top: 4px; color: var(--muted); font: 9px 'DM Sans'; }
+.holding-badge { width: 29px; height: 29px; display: grid; place-items: center; flex: 0 0 29px; border: 1px solid rgba(200,255,77,.5); border-radius: 50%; color: var(--lime); font: 9px var(--mono); }
+.holding-badge--stock { border-radius: 6px; color: var(--orange); border-color: rgba(223,142,82,.5); }
+.holding-row > span small { color: var(--muted); font: 9px 'DM Sans'; }
+.holdings-table + .holdings-note { margin-top: 13px; }
+.holdings-note { display: flex; align-items: center; gap: 7px; color: var(--muted-2); font-size: 9px; }
+.account-empty { min-height: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--muted); border: 1px dashed var(--line-strong); }
+.account-empty strong { color: var(--text); font-size: 13px; }
+.account-empty span { font-size: 10px; }
+.account-empty--small { min-height: 150px; border: 0; }
+.account-trade-row { display: flex; align-items: center; gap: 10px; padding: 13px 0; border-top: 1px solid var(--line); }
+.account-trade-icon { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; }
+.account-trade-icon.buy { color: var(--lime); background: rgba(200,255,77,.1); }
+.account-trade-icon.sell { color: var(--coral); background: rgba(255,115,95,.1); }
+.account-trade-row > span:nth-child(2) { flex: 1; }
+.account-trade-row strong, .account-trade-row small { display: block; }
+.account-trade-row strong { font-size: 11px; font-weight: 500; }
+.account-trade-row small { margin-top: 4px; color: var(--muted); font-size: 9px; }
+.account-trade-row b { color: var(--muted); font: 10px var(--mono); }
+.breakdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.breakdown-grid > div { min-height: 82px; padding: 15px 15px 0 0; border-right: 1px solid var(--line); }
+.breakdown-grid > div:not(:first-child) { padding-left: 15px; }
+.breakdown-grid > div:last-child { border-right: 0; }
+.breakdown-grid span, .breakdown-grid small, .breakdown-grid strong { display: block; }
+.breakdown-grid span { color: var(--muted); font-size: 10px; }
+.breakdown-grid strong { margin: 9px 0 4px; font: 12px var(--mono); }
+.breakdown-grid small { color: var(--muted-2); font-size: 9px; }
+.account-content-grid .account-about { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; }
+.account-content-grid .account-danger { display: flex; justify-content: space-between; align-items: center; }
+@media (max-width: 1000px) { .account-kpi-grid { grid-template-columns: repeat(2, 1fr); }.account-kpi--primary { grid-column: 1 / -1; }.account-content-grid { grid-template-columns: 1fr; }.account-content-grid .account-card--wide, .account-content-grid .account-danger { grid-column: auto; }.holdings-card { overflow-x: auto; }.recent-trades-card { min-height: auto; } }
+@media (max-width: 720px) { .account-header-card { align-items: flex-start; flex-direction: column; }.account-header-actions { width: 100%; justify-content: space-between; }.account-kpi-grid { grid-template-columns: 1fr 1fr; }.account-kpi--primary { grid-column: 1 / -1; }.account-kpi { min-height: 110px; padding: 14px; }.account-kpi strong { font-size: 16px; }.account-kpi--primary strong { font-size: 22px; }.account-content-grid .account-about, .account-content-grid .account-danger { display: block; }.account-content-grid .account-about .profile-badges { justify-content: flex-start; margin-top: 19px; }.account-content-grid .account-danger { min-height: 0; }.breakdown-grid { grid-template-columns: 1fr 1fr; }.breakdown-grid > div, .breakdown-grid > div:not(:first-child) { padding: 13px 8px 10px 0; border-bottom: 1px solid var(--line); border-right: 0; }.breakdown-grid > div:nth-child(even) { padding-left: 8px; }.holdings-table { min-width: 650px; } }
+
 @media (max-width: 1000px) {
   .topbar { padding-inline: 27px; gap: 18px; }
   .topbar .breadcrumb { display: none; }
