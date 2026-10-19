@@ -44,6 +44,27 @@
 .position-value small { color: var(--muted); font: 9px 'DM Sans'; margin-top: 5px; }
 @media (max-width: 720px) { .asset-overview-card { grid-column: auto; }.asset-legend, .asset-summary-grid { grid-template-columns: 1fr; }.asset-summary-grid > div, .asset-summary-grid > div + div { padding: 13px 0; border-right: 0; border-bottom: 1px solid var(--line); }.asset-summary-grid > div:last-child { border-bottom: 0; }.position-row { grid-template-columns: 30px 1fr auto; }.position-value { display: none; } }
 
+/* Shared shell: keep the header purposeful and give every route the same close. */
+.topbar { justify-content: flex-start; gap: 0; }
+.primary-nav { width: auto; flex: 1; margin-left: 48px; }
+.primary-nav .nav-item { width: auto; display: inline-flex; border-left: 0; border-bottom: 2px solid transparent; padding: 24px 13px 22px; }
+.primary-nav .nav-item--active { border-bottom-color: var(--lime); }
+.topbar-actions { margin-left: auto; }
+.site-footer { max-width: 1440px; margin: 0 auto; padding: 40px 54px 27px; border-top: 1px solid var(--line); color: var(--muted); }
+.site-footer__main { display: grid; grid-template-columns: 1.15fr 1fr 1.2fr; gap: 40px; align-items: start; }
+.site-footer__brand { display: inline-flex; width: fit-content; align-items: center; gap: 11px; padding: 0; background: transparent; text-align: left; }
+.site-footer__brand .brand-orbit { width: 31px; height: 31px; }
+.site-footer__brand strong, .site-footer__brand small { display: block; }
+.site-footer__brand strong { color: var(--text); font-size: 15px; letter-spacing: .04em; }
+.site-footer__brand small { color: var(--muted-2); font-size: 9px; letter-spacing: .18em; margin-top: 3px; }
+.site-footer__main > p { margin: 0; font-size: 11px; line-height: 1.8; }
+.site-footer__links { display: flex; justify-content: flex-end; gap: 18px; flex-wrap: wrap; }
+.site-footer__links button { padding: 3px 0; color: var(--muted); background: transparent; font-size: 11px; }
+.site-footer__links button:hover { color: var(--lime); }
+.site-footer__bottom { display: flex; justify-content: space-between; gap: 20px; margin-top: 32px; padding-top: 15px; border-top: 1px solid var(--line); color: var(--muted-2); font: 9px var(--mono); }
+@media (max-width: 1000px) { .primary-nav { margin-left: 24px; }.site-footer { padding-inline: 30px; }.site-footer__main { grid-template-columns: 1fr 1fr; }.site-footer__links { justify-content: flex-start; } }
+@media (max-width: 720px) { .topbar { padding-inline: 17px; }.primary-nav { margin-left: 10px; display: flex; justify-content: center; }.primary-nav .nav-item { gap: 6px; padding: 20px 7px 18px; font-size: 10px; }.primary-nav .nav-item .nav-arrow { display: none; }.avatar-label { display: none; }.site-footer { padding: 32px 17px 22px; }.site-footer__main { grid-template-columns: 1fr; gap: 22px; }.site-footer__links { justify-content: flex-start; gap: 17px; }.site-footer__bottom { flex-direction: column; gap: 8px; margin-top: 24px; } }
+
 /* Top navigation: the observatory controls stay visible above every route. */
 .app-shell { display: block; }
 .topbar { position: sticky; top: 0; z-index: 10; height: 76px; padding: 0 42px; gap: 28px; background: rgba(9, 17, 15, .92); backdrop-filter: blur(18px); }

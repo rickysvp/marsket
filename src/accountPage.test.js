@@ -8,7 +8,7 @@ describe('Marsket account experience', () => {
 
     expect(appSource).not.toContain("{ label: '个人设置'")
     expect(appSource).toContain('aria-label="我的账户"')
-    expect(appSource).toContain('ACCOUNT OVERVIEW')
+    expect(appSource).toContain('kicker="ACCOUNT"')
     expect(appSource).toContain('ACCOUNT BREAKDOWN')
     expect(appSource).toContain('持仓明细')
     expect(appSource).toContain('当前市值')
