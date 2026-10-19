@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   ArrowDownRight, ArrowUpRight, BarChart3, Bell, BookOpen, ChevronRight, CircleHelp,
   Compass, MoreHorizontal, Orbit, Search, Settings2, ShieldCheck, Sparkles,
-  Trophy, UserRound, WalletCards, X, Zap,
+  Trophy, WalletCards, X, Zap,
 } from 'lucide-react'
 import { categories, leaderboard, markets } from './mockData'
 import { createSimulationState, executeTrade, loadSimulationState, saveSimulationState } from './simulationStore'
@@ -11,7 +11,6 @@ const navItems = [
   { label: '市场', path: '/markets', icon: Compass },
   { label: '我的持仓', path: '/portfolio', icon: BarChart3 },
   { label: '排行榜', path: '/leaderboard', icon: Trophy },
-  { label: '个人设置', path: '/profile', icon: UserRound },
 ]
 
 function useRoute() {
@@ -99,8 +98,8 @@ function App() {
               </button>
             })}
           </nav>
-          <div className="breadcrumb"><span>MARSKET /</span><strong>{activeMarket ? 'MARKET DETAIL' : path === '/markets' ? 'MARKETS' : path.slice(1).toUpperCase()}</strong></div>
-          <div className="topbar-actions"><span className="topbar-clock">更新时间 2026.10.19 · 14:32</span><button className="icon-btn"><Bell size={17} /><span className="notification-dot" /></button><button className="avatar-button">R</button></div>
+          <div className="breadcrumb"><span>MARSKET /</span><strong>{activeMarket ? 'MARKET DETAIL' : path === '/markets' ? 'MARKETS' : path === '/profile' ? 'ACCOUNT' : path.slice(1).toUpperCase()}</strong></div>
+          <div className="topbar-actions"><span className="topbar-clock">更新时间 2026.10.19 · 14:32</span><button className="icon-btn"><Bell size={17} /><span className="notification-dot" /></button><button className={`account-trigger ${path === '/profile' ? 'account-trigger--active' : ''}`} onClick={() => navigate('/profile')} aria-label="我的账户"><span className="avatar-button">R</span><span className="avatar-label">我的账户</span></button></div>
         </header>
         {page}
       </main>
@@ -159,6 +158,24 @@ function Portfolio({ simulation, onNavigate }) {
 
 function Leaderboard() { return <div className="page"><PageHeading kicker="MARKET RANKING / 03" title={<>谁对未来<br /><em>判断更准？</em></>} description="用户之间的模拟收益排名，每周一更新。" children={<div className="rank-period"><span className="live-dot" /> 本周排名 · W42</div>} /><div className="leaderboard-layout"><div className="podium"><div className="podium-kicker">TOP TRADERS / 本周榜首</div><div className="podium-constellation"><div className="star star-a" /><div className="star star-b" /><div className="star star-c" /><div className="constellation-line line-a" /><div className="constellation-line line-b" /><div className="podium-avatar">北</div><div className="podium-ring" /></div><div className="podium-name">北极星_07</div><div className="podium-return">+42.80%</div><div className="podium-score">虚拟净值 ¥ 14,280</div><div className="podium-citation">“先看数据，再做判断。”</div></div><div className="ranking-table"><div className="ranking-table__head"><span>RANK / 用户</span><span>周收益</span><span>模拟净值</span></div>{leaderboard.map((person) => <div className={`ranking-row ${person.rank === 1 ? 'ranking-row--top' : ''}`} key={person.rank}><span className={`rank-number ${person.accent || ''}`}>{String(person.rank).padStart(2, '0')}</span><span className="rank-person"><span className={`rank-avatar ${person.accent || ''}`}>{person.avatar}</span><strong>{person.name}</strong></span><span className="positive">{person.return}</span><span>{person.score}</span></div>)}<div className="your-rank"><span>你的当前位置</span><strong>—</strong><span>完成一次模拟交易后加入榜单</span></div></div></div><div className="disclaimer"><Trophy size={14} /><span>榜单只代表虚拟交易表现，不代表真实投资能力或未来收益。</span></div></div> }
 
-function Profile({ simulation, onReset }) { const [resetOpen, setResetOpen] = useState(false); return <div className="page"><PageHeading kicker="PERSONAL CENTER / 04" title={<>我的<br /><em>个人中心</em></>} description="管理你的模拟账户和交易数据。" /><div className="profile-grid"><section className="profile-card profile-card--hero"><div className="profile-avatar">R</div><div><span className="eyebrow">USER ID / MARS-042</span><h2>Ricky 的账户</h2><p>加入火星市场 · 第 18 个交易日</p></div><div className="profile-orbit"><Orbit size={56} /></div></section><section className="profile-card"><div className="card-heading"><div><span className="eyebrow">SIMULATION ACCOUNT</span><h2>模拟账户</h2></div><Settings2 size={18} /></div><div className="profile-setting"><span>初始虚拟余额</span><strong>¥ 10,000</strong></div><div className="profile-setting"><span>当前虚拟余额</span><strong>{formatMoney(simulation.balance)}</strong></div><div className="profile-setting"><span>本地数据状态</span><strong className="positive"><span className="live-dot" /> 已同步</strong></div></section><section className="profile-card profile-card--wide"><div className="card-heading"><div><span className="eyebrow">ABOUT MARSKET</span><h2>关于火星市场</h2></div><BookOpen size={18} /></div><p className="profile-copy">Marsket 是一个面向中文用户的模拟预测市场。你可以预测 BTC 和美股价格涨跌，参与体育与电子竞技赛事预测，也可以购买美股虚拟股，建立自己的模拟组合。</p><div className="profile-badges"><span><Compass size={14} /> 多品类市场</span><span><ShieldCheck size={14} /> 虚拟资金隔离</span><span><Zap size={14} /> 简单快速交易</span></div></section><section className="profile-card danger-card"><div><span className="eyebrow">DATA CONTROLS</span><h2>重置模拟账户</h2><p>清除所有虚拟持仓和活动记录，恢复至初始余额。</p></div>{resetOpen ? <div className="reset-confirm"><span>确定清除全部数据？</span><button onClick={() => { onReset(); setResetOpen(false) }}>确定</button><button onClick={() => setResetOpen(false)}>取消</button></div> : <button className="danger-button" onClick={() => setResetOpen(true)}>重置数据</button>}</section></div></div> }
+function Profile({ simulation, onReset }) {
+  const [resetOpen, setResetOpen] = useState(false)
+  const stockCount = Object.keys(simulation.positions).filter((marketId) => markets.find((market) => market.id === marketId)?.kind === 'stock').length
+  const predictionCount = Object.keys(simulation.positions).length - stockCount
+  return <div className="page page--account">
+    <PageHeading kicker="ACCOUNT OVERVIEW / 04" title={<>我的<br /><em>账户</em></>} description="查看账户概览、模拟资产和交易偏好。" children={<span className="account-verified"><ShieldCheck size={14} /> 模拟账户已验证</span>} />
+    <div className="account-layout">
+      <section className="account-hero">
+         <div className="account-identity"><div className="profile-avatar">R</div><div><span className="eyebrow">USER ID / USER-042</span><h2>Ricky</h2><p>注册于 2026 年 10 月 · 简体中文</p></div><button className="account-edit"><Settings2 size={15} /> 编辑资料</button></div>
+        <div className="account-metrics"><div><span>账户状态</span><strong className="positive"><i className="live-dot" /> 正常</strong></div><div><span>模拟净资产</span><strong>{formatMoney(simulation.balance)}</strong></div><div><span>预测市场</span><strong>{predictionCount}<small> 个</small></strong></div><div><span>虚拟股票</span><strong>{stockCount}<small> 个</small></strong></div></div>
+      </section>
+      <section className="account-card account-card--funds"><div className="account-card__heading"><div><span className="eyebrow">SIMULATION FUNDS</span><h2>模拟资金</h2></div><WalletCards size={18} /></div><div className="funds-total"><span>当前可用余额</span><strong>{formatMoney(simulation.balance)}</strong><small>所有余额均为虚拟资金，不具备现实价值</small></div><div className="funds-row"><span>初始余额</span><strong>{formatMoney(10000)}</strong></div><div className="funds-row"><span>已使用资金</span><strong>{formatMoney(Math.max(0, 10000 - simulation.balance))}</strong></div></section>
+      <section className="account-card"><div className="account-card__heading"><div><span className="eyebrow">ACCOUNT SECURITY</span><h2>账户安全</h2></div><ShieldCheck size={18} /></div><div className="security-row"><span><b>登录保护</b><small>当前设备已授权</small></span><strong className="positive">已开启</strong></div><div className="security-row"><span><b>账户数据</b><small>仅保存在当前浏览器</small></span><strong className="positive">正常</strong></div><div className="security-row"><span><b>真实资金</b><small>未连接支付或钱包</small></span><strong>未启用</strong></div></section>
+      <section className="account-card account-card--wide"><div className="account-card__heading"><div><span className="eyebrow">TRADING PREFERENCES</span><h2>交易偏好</h2></div><Settings2 size={18} /></div><div className="preference-grid"><div><span>默认市场</span><strong>全部市场</strong><small>加密货币、美股、体育、电竞</small></div><div><span>默认结算货币</span><strong>CNY ¥</strong><small>虚拟交易金额显示</small></div><div><span>价格更新</span><strong>实时模拟</strong><small>使用本地仿真行情</small></div></div></section>
+      <section className="account-card account-card--wide account-about"><div><span className="eyebrow">ABOUT MARSKET</span><h2>关于火星市场</h2><p>一个面向中文用户的模拟预测市场：预测 BTC 和美股价格涨跌，参与体育与电子竞技赛事预测，也可以购买美股虚拟股，建立自己的模拟组合。</p></div><div className="profile-badges"><span><Compass size={14} /> 多品类市场</span><span><ShieldCheck size={14} /> 虚拟资金隔离</span><span><Zap size={14} /> 简单快速交易</span></div></section>
+      <section className="account-card account-danger"><div><span className="eyebrow">DATA CONTROLS</span><h2>重置模拟账户</h2><p>清除全部虚拟持仓和交易记录，恢复初始余额。</p></div>{resetOpen ? <div className="reset-confirm"><span>确定清除全部数据？</span><button onClick={() => { onReset(); setResetOpen(false) }}>确定</button><button onClick={() => setResetOpen(false)}>取消</button></div> : <button className="danger-button" onClick={() => setResetOpen(true)}>重置数据</button>}</section>
+    </div>
+  </div>
+}
 
 export default App
