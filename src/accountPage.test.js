@@ -2,6 +2,15 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
 describe('Marsket account experience', () => {
+  it('includes a local demo login flow', () => {
+    const appSource = readFileSync(new URL('./App.jsx', import.meta.url), 'utf8')
+
+    expect(appSource).toContain('function Login')
+    expect(appSource).toContain("rickysvp")
+    expect(appSource).toContain('marsket-auth')
+    expect(appSource).toContain('退出登录')
+  })
+
   it('uses one account concept for navigation and the account page', () => {
     const appSource = readFileSync(new URL('./App.jsx', import.meta.url), 'utf8')
     const profileSource = appSource.slice(appSource.indexOf('function Profile'))

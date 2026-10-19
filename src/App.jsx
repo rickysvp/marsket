@@ -13,6 +13,26 @@ const navItems = [
   { label: '排行榜', path: '/leaderboard', icon: Trophy },
 ]
 
+const AUTH_STORAGE_KEY = 'marsket-auth'
+
+function loadAuth(storage = globalThis.localStorage) {
+  if (!storage) return null
+  try {
+    const saved = storage.getItem(AUTH_STORAGE_KEY)
+    return saved ? JSON.parse(saved) : null
+  } catch {
+    return null
+  }
+}
+
+function saveAuth(user, storage = globalThis.localStorage) {
+  storage?.setItem(AUTH_STORAGE_KEY, JSON.stringify(user))
+}
+
+function clearAuth(storage = globalThis.localStorage) {
+  storage?.removeItem(AUTH_STORAGE_KEY)
+}
+
 function useRoute() {
   const [path, setPath] = useState(window.location.pathname || '/markets')
   useEffect(() => {
@@ -62,9 +82,25 @@ function Sparkline({ values, positive = true, large = false }) {
 
 function App() {
   const { path, navigate } = useRoute()
+  const [auth, setAuth] = useState(() => loadAuth())
   const [simulation, setSimulation] = useState(() => loadSimulationState())
 
   useEffect(() => saveSimulationState(simulation), [simulation])
+
+  const login = (username) => {
+    const user = { username, displayName: username === 'rickysvp' ? 'Ricky' : username }
+    saveAuth(user)
+    setAuth(user)
+    navigate('/markets')
+  }
+
+  const logout = () => {
+    clearAuth()
+    setAuth(null)
+    navigate('/login')
+  }
+
+  if (!auth) return <Login onLogin={login} />
 
   const trade = (input) => {
     const result = executeTrade(simulation, input)
@@ -78,7 +114,7 @@ function App() {
   const page = activeMarket ? <MarketDetail market={activeMarket} simulation={simulation} onTrade={trade} onNavigate={navigate} />
     : path === '/portfolio' ? <Portfolio simulation={simulation} onNavigate={navigate} />
       : path === '/leaderboard' ? <Leaderboard />
-        : path === '/profile' ? <Profile simulation={simulation} onReset={() => setSimulation(createSimulationState())} />
+        : path === '/profile' ? <Profile simulation={simulation} onReset={() => setSimulation(createSimulationState())} onLogout={logout} />
           : <MarketsHome onNavigate={navigate} />
 
   return (
@@ -104,6 +140,19 @@ function App() {
       </main>
     </div>
   )
+}
+
+function Login({ onLogin }) {
+  const [username, setUsername] = useState('rickysvp')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const submit = (event) => {
+    event.preventDefault()
+    if (!username.trim()) return setError('请输入用户名')
+    if (!password.trim()) return setError('请输入密码')
+    onLogin(username.trim())
+  }
+  return <div className="login-shell"><div className="login-glow login-glow--one" /><div className="login-glow login-glow--two" /><main className="login-card"><div className="login-brand"><span className="brand-orbit"><Orbit size={25} strokeWidth={1.7} /></span><span><strong>Marsket</strong><small>火星市场</small></span></div><div className="login-heading"><span className="eyebrow">WELCOME BACK</span><h1>登录<br /><em>火星市场</em></h1><p>进入你的市场、持仓和账户。</p></div><form className="login-form" onSubmit={submit}><label>用户名<input value={username} onChange={(event) => setUsername(event.target.value)} autoComplete="username" /></label><label>密码<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" placeholder="请输入密码" /></label>{error && <div className="login-error">{error}</div>}<button className="login-submit" type="submit">登录账户 <ChevronRight size={16} /></button></form><div className="login-note"><ShieldCheck size={14} /><span>Demo 登录 · 仅用于体验账户流程</span></div></main><footer className="login-footer">Marsket · 火星市场 <span>© 2026</span></footer></div>
 }
 
 function PageHeading({ kicker, title, description, children }) {
@@ -159,7 +208,7 @@ function Portfolio({ simulation, onNavigate }) {
 
 function Leaderboard() { return <div className="page"><div className="leaderboard-layout"><div className="podium"><div className="podium-kicker">TOP TRADERS / 本周榜首</div><div className="podium-constellation"><div className="star star-a" /><div className="star star-b" /><div className="star star-c" /><div className="constellation-line line-a" /><div className="constellation-line line-b" /><div className="podium-avatar">北</div><div className="podium-ring" /></div><div className="podium-name">北极星_07</div><div className="podium-return">+42.80%</div><div className="podium-score">净值 ¥ 14,280</div><div className="podium-citation">“先看数据，再做判断。”</div></div><div className="ranking-table"><div className="ranking-table__head"><span>RANK / 用户</span><span>周收益</span><span>净值</span></div>{leaderboard.map((person) => <div className={`ranking-row ${person.rank === 1 ? 'ranking-row--top' : ''}`} key={person.rank}><span className={`rank-number ${person.accent || ''}`}>{String(person.rank).padStart(2, '0')}</span><span className="rank-person"><span className={`rank-avatar ${person.accent || ''}`}>{person.avatar}</span><strong>{person.name}</strong></span><span className="positive">{person.return}</span><span>{person.score}</span></div>)}<div className="your-rank"><span>你的当前位置</span><strong>—</strong><span>完成一次交易后加入榜单</span></div></div></div><div className="disclaimer"><Trophy size={14} /><span>榜单只代表虚拟交易表现，不代表真实投资能力或未来收益。</span></div></div> }
 
-function Profile({ simulation, onReset }) {
+function Profile({ simulation, onReset, onLogout }) {
   const [resetOpen, setResetOpen] = useState(false)
   const holdings = Object.entries(simulation.positions).flatMap(([marketId, sides]) => Object.entries(sides).map(([side, position]) => {
     const market = markets.find((item) => item.id === marketId)
@@ -180,7 +229,7 @@ function Profile({ simulation, onReset }) {
 
   return <div className="page page--account">
     <PageHeading kicker="ACCOUNT" title={<>我的<br /><em>账户</em></>} description="账户资料、资产概览与交易活动。" children={<span className="account-verified"><ShieldCheck size={14} /> 账户已验证</span>} />
-    <section className="account-header-card"><div className="account-user"><div className="profile-avatar">R</div><div><span className="eyebrow">USER ID / USER-042</span><h2>Ricky</h2><p>注册于 2026 年 10 月 · Marsket Demo</p></div></div><div className="account-header-actions"><span><i className="live-dot" /> 数据已同步</span><button className="account-edit"><Settings2 size={15} /> 账户设置</button></div></section>
+    <section className="account-header-card"><div className="account-user"><div className="profile-avatar">R</div><div><span className="eyebrow">USER ID / USER-042</span><h2>Ricky</h2><p>注册于 2026 年 10 月 · Marsket Demo</p></div></div><div className="account-header-actions"><span><i className="live-dot" /> 数据已同步</span><button className="account-edit"><Settings2 size={15} /> 账户设置</button><button className="account-logout" onClick={onLogout}>退出登录</button></div></section>
     <div className="account-kpi-grid"><div className="account-kpi account-kpi--primary"><span>总资产估值</span><strong>{formatMoney(simulation.balance + totalValue)}</strong><small>现金余额 + 持仓市值</small></div><div className="account-kpi"><span>可用余额</span><strong>{formatMoney(simulation.balance)}</strong><small>可用于下一笔交易</small></div><div className="account-kpi"><span>累计交易</span><strong>{totalTrades}</strong><small>笔交易记录</small></div><div className="account-kpi"><span>账户持仓</span><strong>{holdings.length}</strong><small>{predictionCount} 个预测 · {stockCount} 支虚拟股</small></div></div>
     <div className="account-content-grid">
        <section className="account-card account-card--wide asset-overview-card"><div className="account-card__heading"><div><span className="eyebrow">ASSET OVERVIEW</span><h2>资产概览</h2></div><span className="holdings-count">账户净值</span></div><div className="asset-overview-total"><strong>{formatMoney(simulation.balance + totalValue)}</strong><span>当前账户总资产</span></div><div className="asset-bar"><span className="asset-bar__cash" style={{ width: `${cashRatio}%` }} /><span className="asset-bar__positions" style={{ width: `${positionRatio}%` }} /></div><div className="asset-legend"><div><span><i className="asset-dot asset-dot--cash" />可用现金</span><strong>{formatMoney(simulation.balance)} <small>{cashRatio}%</small></strong></div><div><span><i className="asset-dot asset-dot--positions" />持仓市值</span><strong>{formatMoney(totalValue)} <small>{positionRatio}%</small></strong></div></div><div className="asset-summary-grid"><div><span>未实现盈亏</span><strong className={totalPnl >= 0 ? 'positive' : 'negative'}>{totalPnl >= 0 ? '+' : ''}{formatMoney(totalPnl)}</strong></div><div><span>资产类别</span><strong>{predictionCount} 预测 · {stockCount} 支虚拟股</strong></div><div><span>账户单位</span><strong>CNY ¥</strong></div></div><div className="holdings-note"><ShieldCheck size={13} /> 数据用于 Demo 体验</div></section>
