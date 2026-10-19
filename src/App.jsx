@@ -87,20 +87,21 @@ function App() {
 
   useEffect(() => saveSimulationState(simulation), [simulation])
 
-  const login = (username) => {
+  const login = (username, destination = '/markets') => {
     const user = { username, displayName: username === 'rickysvp' ? 'Ricky' : username }
     saveAuth(user)
     setAuth(user)
-    navigate('/markets')
+    navigate(destination)
   }
 
   const logout = () => {
     clearAuth()
     setAuth(null)
-    navigate('/login')
+    navigate('/profile')
   }
 
-  if (!auth) return <Login onLogin={login} />
+  const requiresAuth = path === '/portfolio' || path === '/profile'
+  if (!auth && requiresAuth) return <Login onLogin={(username) => login(username, path)} />
 
   const trade = (input) => {
     const result = executeTrade(simulation, input)
