@@ -26,6 +26,11 @@
 .topbar .nav-arrow { margin-left: 2px; font-size: 13px; }
 .topbar .breadcrumb { margin-left: auto; white-space: nowrap; }
 .main-canvas { width: 100%; }
+.stock-quote { display: flex; justify-content: space-between; align-items: center; padding: 18px 14px; margin-bottom: 20px; background: rgba(200,255,77,.06); border: 1px solid rgba(200,255,77,.18); }
+.stock-quote__symbol { color: var(--lime); font: 20px var(--mono); letter-spacing: .05em; }
+.stock-quote strong, .stock-quote small { display: block; text-align: right; }
+.stock-quote strong { font: 18px var(--mono); }
+.stock-quote small { margin-top: 5px; font-size: 10px; }
 
 @media (max-width: 1000px) {
   .topbar { padding-inline: 27px; gap: 18px; }

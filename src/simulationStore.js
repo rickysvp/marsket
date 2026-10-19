@@ -8,7 +8,7 @@ export function createSimulationState() {
   }
 }
 
-export function executeTrade(state, { marketId, side, action, amount, price }) {
+export function executeTrade(state, { marketId, side, instrument = 'prediction', action, amount, price }) {
   const numericAmount = Number(amount)
   const numericPrice = Number(price)
 
@@ -17,7 +17,9 @@ export function executeTrade(state, { marketId, side, action, amount, price }) {
   }
 
   const position = state.positions[marketId]?.[side]
-  const cost = numericAmount * numericPrice
+  const isStock = instrument === 'stock'
+  const quantity = isStock && action === 'buy' ? numericAmount / numericPrice : numericAmount
+  const cost = isStock ? numericAmount * (action === 'sell' ? 1 : 1) : numericAmount * numericPrice
 
   if (action === 'buy' && cost > state.balance) {
     return { state, error: '虚拟余额不足' }
@@ -32,19 +34,19 @@ export function executeTrade(state, { marketId, side, action, amount, price }) {
   const current = marketPosition[side]
 
   if (action === 'buy') {
-    const shares = (current?.shares ?? 0) + numericAmount
+    const shares = (current?.shares ?? 0) + quantity
     const totalCost = (current?.shares ?? 0) * (current?.averagePrice ?? 0) + cost
     marketPosition[side] = { shares, averagePrice: totalCost / shares }
     next.balance -= cost
   } else {
-    const shares = current.shares - numericAmount
+    const shares = current.shares - quantity
     if (shares <= 0) {
       delete marketPosition[side]
     } else {
       marketPosition[side] = current
       marketPosition[side].shares = shares
     }
-    next.balance += cost
+    next.balance += isStock ? numericAmount * numericPrice : cost
   }
 
   if (Object.keys(marketPosition).length) next.positions[marketId] = marketPosition

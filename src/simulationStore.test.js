@@ -29,4 +29,15 @@ describe('Marsket simulation ledger', () => {
     expect(sold.state.balance).toBe(9981.2)
     expect(sold.state.positions['btc-150k'].YES.shares).toBe(60)
   })
+
+  it('supports buying and selling a virtual US stock position', () => {
+    const initial = createSimulationState()
+    const bought = executeTrade(initial, { marketId: 'aapl-stock', side: 'AAPL', instrument: 'stock', action: 'buy', amount: 500, price: 210 }).state
+    const sold = executeTrade(bought, { marketId: 'aapl-stock', side: 'AAPL', instrument: 'stock', action: 'sell', amount: 1, price: 215 })
+
+    expect(bought.balance).toBe(9500)
+    expect(bought.positions['aapl-stock'].AAPL).toEqual({ shares: 2.380952380952381, averagePrice: 210 })
+    expect(sold.state.balance).toBe(9715)
+    expect(sold.state.positions['aapl-stock'].AAPL.shares).toBeCloseTo(1.38095, 4)
+  })
 })
