@@ -8,6 +8,20 @@ export const categories = [
   { id: 'macro', label: '宏观经济', count: 1 },
 ]
 
+export const quickAssets = [
+  { symbol: 'BTC', name: 'Bitcoin', price: 118240.2, change: 2.9, quote: 'BTC/USD' },
+  { symbol: 'ETH', name: 'Ethereum', price: 3650.8, change: 1.4, quote: 'ETH/USD' },
+  { symbol: 'AAPL', name: 'Apple Inc.', price: 210.35, change: 1.62, quote: 'AAPL' },
+  { symbol: 'NVDA', name: 'NVIDIA Corp.', price: 184.72, change: -0.84, quote: 'NVDA' },
+  { symbol: 'TSLA', name: 'Tesla Inc.', price: 342.18, change: 3.45, quote: 'TSLA' },
+]
+
+export const quickModes = [
+  { id: 'direction', label: '涨跌预测', eyebrow: 'UP / DOWN' },
+  { id: 'digit', label: '价格尾数', eyebrow: 'LAST DECIMAL' },
+  { id: 'hash', label: 'Hash 尾字符', eyebrow: 'HEX CHAR' },
+]
+
 export const markets = [
   {
     id: 'btc-150k', category: 'crypto', categoryLabel: '加密货币', eyebrow: '涨跌预测 / BTC', kind: 'prediction',

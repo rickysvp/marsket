@@ -5,10 +5,12 @@ import {
   Trophy, WalletCards, X, Zap,
 } from 'lucide-react'
 import { categories, leaderboard, markets } from './mockData'
-import { createSimulationState, executeTrade, loadSimulationState, saveSimulationState } from './simulationStore'
+import { createSimulationState, executeTrade, loadSimulationState, saveSimulationState, settleQuickRound, placeQuickBet } from './simulationStore'
+import { QuickGameDetail, QuickGamesPage } from './QuickGames'
 
 const navItems = [
   { label: '市场', path: '/markets', icon: Compass },
+  { label: '快速玩法', path: '/quick-games', icon: Zap },
   { label: '我的持仓', path: '/portfolio', icon: BarChart3 },
   { label: '排行榜', path: '/leaderboard', icon: Trophy },
 ]
@@ -84,6 +86,7 @@ function App() {
   const { path, navigate } = useRoute()
   const [auth, setAuth] = useState(() => loadAuth())
   const [simulation, setSimulation] = useState(() => loadSimulationState())
+  const [loginIntent, setLoginIntent] = useState(false)
 
   useEffect(() => saveSimulationState(simulation), [simulation])
 
@@ -91,6 +94,7 @@ function App() {
     const user = { username, displayName: username === 'rickysvp' ? 'Ricky' : username }
     saveAuth(user)
     setAuth(user)
+    setLoginIntent(false)
     navigate(destination)
   }
 
@@ -101,7 +105,7 @@ function App() {
   }
 
   const requiresAuth = path === '/portfolio' || path === '/profile'
-  const loginRequired = !auth && requiresAuth
+  const loginRequired = !auth && (requiresAuth || loginIntent)
 
   const trade = (input) => {
     const result = executeTrade(simulation, input)
@@ -110,10 +114,25 @@ function App() {
     return null
   }
 
+  const quickBet = (input) => {
+    const result = placeQuickBet(simulation, input)
+    if (result.error) return result.error
+    setSimulation(result.state)
+    return null
+  }
+
+  const quickSettle = (round) => {
+    const result = settleQuickRound(simulation, round)
+    if (result.state !== simulation) setSimulation(result.state)
+  }
+
   const activeId = path.startsWith('/markets/') ? path.split('/')[2] : null
   const activeMarket = markets.find((market) => market.id === activeId)
+  const quickId = path.startsWith('/quick-games/') ? path.split('/')[2] : null
   const page = activeMarket ? <MarketDetail market={activeMarket} simulation={simulation} onTrade={trade} onNavigate={navigate} />
-    : path === '/portfolio' ? <Portfolio simulation={simulation} onNavigate={navigate} />
+    : quickId ? <QuickGameDetail roundId={quickId} simulation={simulation} authenticated={Boolean(auth)} onNavigate={navigate} onRequireLogin={() => setLoginIntent(true)} onBet={quickBet} onSettle={quickSettle} />
+      : path === '/quick-games' ? <QuickGamesPage simulation={simulation} onNavigate={navigate} onSettle={quickSettle} />
+        : path === '/portfolio' ? <Portfolio simulation={simulation} onNavigate={navigate} />
       : path === '/leaderboard' ? <Leaderboard />
         : path === '/profile' ? <Profile simulation={simulation} onReset={() => setSimulation(createSimulationState())} onLogout={logout} />
           : <MarketsHome onNavigate={navigate} />
@@ -137,7 +156,7 @@ function App() {
           <div className="topbar-actions"><button className={`account-trigger ${path === '/profile' ? 'account-trigger--active' : ''}`} onClick={() => navigate('/profile')} aria-label="我的账户"><span className="avatar-button">R</span><span className="avatar-label">我的账户</span></button></div>
         </header>
         {page}
-        {loginRequired && <Login onLogin={(username) => login(username, path)} onCancel={() => navigate('/markets')} />}
+        {loginRequired && <Login onLogin={(username) => login(username, path)} onCancel={() => { setLoginIntent(false); if (requiresAuth) navigate('/markets') }} />}
         <Footer onNavigate={navigate} />
       </main>
     </div>
