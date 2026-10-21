@@ -4,7 +4,7 @@
 
 ## 本地运行
 
-在 `/Users/ricky/AICode/poly/reference-platform-prototype` 中运行：
+在项目根目录中运行：
 
 ```bash
 npm ci

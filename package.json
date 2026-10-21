@@ -1,23 +1,20 @@
 {
-  "name": "marsket-demo",
+  "name": "arena-reference-prototype",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.1.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "release": "node scripts/release.mjs",
-    "version:show": "node -p \"require('./package.json').version\""
+    "release": "node scripts/release.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^5.4.10",
-    "vitest": "^2.1.8",
+    "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "lucide-react": "latest"
-  },
-  "devDependencies": {}
+    "vite": "^5.4.10",
+    "vitest": "^2.1.8"
+  }
 }
