@@ -4,9 +4,10 @@
 
 ## 本地运行
 
-本目录使用上层工作区已安装的依赖。在 `/Users/ricky/AICode/poly/reference-platform-prototype` 中运行：
+在 `/Users/ricky/AICode/poly/reference-platform-prototype` 中运行：
 
 ```bash
+npm ci
 npm run dev
 ```
 

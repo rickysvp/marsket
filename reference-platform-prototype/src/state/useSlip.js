@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { addOrToggleSelection, removeSelection, setStake, markOddsChanged, confirmOdds } from './slip.js'
+import { addOrToggleSelection, removeSelection, setStake, markOddsChanged, confirmOdds, applyKeypad } from './slip.js'
 
 export function useSlip() {
   const [items, setItems] = useState([])
   const [mode, setMode] = useState('single')
-  const [stake, updateStake] = useState(0)
+  const [stake, updateStake] = useState('')
   const [open, setOpen] = useState(false)
   const [notice, setNotice] = useState('')
   const select = (event, market, selection) => {
@@ -15,5 +15,5 @@ export function useSlip() {
     return true
   }
   const simulate = () => { if (items.length) { setItems((current) => markOddsChanged(current, current[0].id, Math.round((current[0].odds + 0.08) * 100) / 100)); setOpen(true) } }
-  return { items, mode, setMode, stake, setStake: (value) => updateStake(setStake(value)), open, setOpen, notice, setNotice, select, remove: (id) => setItems((current) => removeSelection(current, id)), simulate, confirm: () => setItems((current) => confirmOdds(current)), clear: () => { setItems([]); updateStake(0) } }
+  return { items, mode, setMode, stake, setStake: (value) => updateStake(value === '' ? '' : /^\d{0,8}(\.\d{0,2})?$/.test(String(value)) ? String(value) : String(setStake(value))), pressKey: (key) => updateStake((current) => applyKeypad(current, key)), open, setOpen, notice, setNotice, select, remove: (id) => setItems((current) => removeSelection(current, id)), simulate, confirm: () => setItems((current) => confirmOdds(current)), clear: () => { setItems([]); updateStake('') } }
 }

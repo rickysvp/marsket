@@ -15,6 +15,7 @@ const rows = [
   ['ky','fishing','金鲨捕鱼','board','捕鱼','推荐','KY'],
   ['ky','mahjong','极速麻将','board','麻将','热门','KY'],
   ['ky','hundred','百人牌局','board','百人','推荐','KY'],
+  ['ky','arcade','街机竞技','board','其他','新品','KY'],
   ['pg','fortune-tiger','幸运之虎','slots','冒险','热门','PG SOFT'],
   ['pg','golden-empire','黄金帝国','slots','宝藏','新品','PG SOFT'],
   ['pg','lucky-rabbit','福兔迎春','slots','幸运','推荐','PG SOFT'],
@@ -31,7 +32,11 @@ export const games = rows.map(([providerId,id,name,type,category,tag,provider], 
   volatility: type === 'slots' ? ['高','中','低'][index % 3] : null,
   lines: type === 'slots' ? [20,25,50][index % 3] : null,
   jackpot: type === 'slots' && index % 3 === 0 ? 128000 + index * 9600 : null,
+  oddsHeat: type === 'slots' ? [57,86,41,93,64,72,35][index % 7] : null,
   table: type === 'casino' ? `${String(index + 1).padStart(2,'0')}号桌` : null,
+  speed: type === 'casino' ? (name.includes('极速') || name.includes('多台') ? '极速' : '经典') : null,
+  roadStyle: type === 'casino' ? (index % 2 ? '庄路' : '闲路') : null,
+  available: !(providerId === 'sa' && id === 'game-show'),
 }))
 export const providers = [...new Set(games.map((game) => game.provider))]
 export function filterGames({ type, category, providerId, query = '', tag } = {}) {
@@ -39,3 +44,10 @@ export function filterGames({ type, category, providerId, query = '', tag } = {}
   return games.filter((game) => (!type || game.type === type) && (!category || category === '全部' || game.category === category) && (!providerId || game.providerId === providerId) && (!tag || tag === '全部' || game.tag === tag) && (!search || [game.name,game.provider,game.category].some((part) => part.toLocaleLowerCase().includes(search))))
 }
 export function getGame(providerId, id) { return games.find((game) => game.providerId === providerId && game.id === id) }
+export function rankSlotGames(items, category) {
+  const ranked = [...items]
+  if (category === '热赔率') return ranked.sort((a,b) => b.oddsHeat-a.oddsHeat)
+  if (category === '冷赔率') return ranked.sort((a,b) => a.oddsHeat-b.oddsHeat)
+  if (category === '最高回报') return ranked.sort((a,b) => b.rtp-a.rtp)
+  return ranked
+}
