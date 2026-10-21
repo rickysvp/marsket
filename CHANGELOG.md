@@ -21,8 +21,9 @@
 
 _尚未发布的变更请记录在此小节。_
 
-### Added
+## [0.2.0] - 2026-10-21
 
+### Added
 - 多品类互动原型：
   - 体育：体育首页、七种体育项目列表、直播目录、赛事详情、演示选择单；
   - 电竞：电竞项目赛程页；
@@ -32,15 +33,11 @@ _尚未发布的变更请记录在此小节。_
   （`src/state`）、演示数据层（`src/data`）与设计令牌、分品类样式（`src/styles`）。
 - 页面外壳组件：`Shell`、`Sidebar`、`Topbar`、`MediaPanel`、`BetSlip`。
 - 参考站核实记录 `docs/qa.md` 与原型预览图 `docs/preview.png`。
-
 ### Changed
-
 - 由单页 QuickGames 演示重构为多品类页面结构，源码统一到仓库根目录。
 - 恢复并增强版本发布脚本 `scripts/release.mjs`：发布时自动将
   `[Unreleased]` 内容归入新版本，支持 `--dry` 与 `--yes` 参数。
-
 ### Removed
-
 - 旧的单页 QuickGames / mockData / simulationStore 演示代码。
 - `reference-platform-prototype` 子目录（内容已上移至根目录）。
 
@@ -57,6 +54,7 @@ _尚未发布的变更请记录在此小节。_
 - Marsket 模拟市场演示应用（React + Vite）。
 - 建立版本号管理机制：CHANGELOG、`scripts/release.mjs` 发布脚本与 git 标签规范。
 
-[Unreleased]: https://github.com/rickysvp/marsket/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/rickysvp/marsket/compare/v0.2.0...HEAD
 [0.1.1]: https://github.com/rickysvp/marsket/releases/tag/v0.1.1
 [0.1.0]: https://github.com/rickysvp/marsket/releases/tag/v0.1.0
+[0.2.0]: https://github.com/rickysvp/marsket/releases/tag/v0.2.0
