@@ -78,11 +78,16 @@ const bodyStart = unreleasedIdx + unreleasedHeader.length;
 const nextVersionIdx = log.indexOf('\n## [', bodyStart);
 const insertAt = nextVersionIdx === -1 ? log.length : nextVersionIdx + 1;
 
-// 提取 Unreleased 正文，去掉占位说明行（_..._）与空行
+// 提取 Unreleased 正文，去掉占位说明行（_..._）、链接定义行（[x]: url）与空行
 const unreleasedBody = log
   .slice(bodyStart, insertAt)
   .split('\n')
-  .filter((line) => line.trim() !== '' && !/^\s*_.*_\s*$/.test(line))
+  .filter(
+    (line) =>
+      line.trim() !== '' &&
+      !/^\s*_.*_\s*$/.test(line) &&
+      !/^\s*\[[^\]]+\]:\s/.test(line)
+  )
   .join('\n')
   .trim();
 

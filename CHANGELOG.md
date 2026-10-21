@@ -44,6 +44,19 @@ _尚未发布的变更请记录在此小节。_
 - 旧的单页 QuickGames / mockData / simulationStore 演示代码。
 - `reference-platform-prototype` 子目录（内容已上移至根目录）。
 
+## [0.1.1] - 2026-10-19
+
+### Changed
+
+- 版本号发布 v0.1.1。
+
+## [0.1.0] - 2026-10-19
+
+### Added
+
+- Marsket 模拟市场演示应用（React + Vite）。
+- 建立版本号管理机制：CHANGELOG、`scripts/release.mjs` 发布脚本与 git 标签规范。
+
 [Unreleased]: https://github.com/rickysvp/marsket/compare/v0.1.1...HEAD
 [0.1.1]: https://github.com/rickysvp/marsket/releases/tag/v0.1.1
 [0.1.0]: https://github.com/rickysvp/marsket/releases/tag/v0.1.0
